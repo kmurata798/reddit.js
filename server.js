@@ -7,10 +7,11 @@ const app = express()
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 var exphbs = require('express-handlebars');
+// const { Mongoose } = require('mongoose');
 
 // Set db
-const database = require('./data/reddit-db');
-const posts = require('./controllers/posts.js')(app);
+require('./controllers/posts.js')(app);
+require('./data/reddit-db');
 
 app.use(bodyParser.json());
 // // The following line must appear AFTER const app = express() and before your routes!
@@ -31,6 +32,12 @@ app.get('/', (req, res) => {
 app.get('/posts/new', (req, res) => {
     res.render('posts-new');
 })
+
+// app.get('/posts', function(req, res) {
+//     mongoose.model('posts').find(function(err, posts) {
+//         res.send(posts);
+//     });
+// });
 
 const port = 3000
 
