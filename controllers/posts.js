@@ -4,8 +4,14 @@ const Post = require('../models/post');
 module.exports = (app) => {
 
   app.get('/', (req, res) => {
-    return res.render('home');
-    })
+    Post.find({}).lean()
+      .then(posts => {
+        res.render("posts-index", { posts });
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  })
     // GET request
   app.get('/posts/new', (req, res) => {
     res.render('posts-new');
