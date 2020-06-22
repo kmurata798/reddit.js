@@ -9,13 +9,12 @@ const expressValidator = require('express-validator');
 var exphbs = require('express-handlebars');
 // const { Mongoose } = require('mongoose');
 
-// Set db
-require('./controllers/posts.js')(app);
-require('./data/reddit-db');
 
-app.use(bodyParser.json());
+// Set db
+require('./data/reddit-db');
 // // The following line must appear AFTER const app = express() and before your routes!
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(expressValidator());
 // // Use the MethodOverride I imported to change POST requests to PUT requests
 // app.use(methodOverride('_method'))
@@ -24,22 +23,14 @@ app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 // Use handlebars to render
 app.set('view engine', 'handlebars');
 
-
-app.get('/', (req, res) => {
-    return res.render('home');
-    })
-
-app.get('/posts/new', (req, res) => {
-    res.render('posts-new');
-})
-
+require('./controllers/posts.js')(app);
 // app.get('/posts', function(req, res) {
 //     mongoose.model('posts').find(function(err, posts) {
 //         res.send(posts);
 //     });
 // });
 
-const port = 3000
+const port = process.env.PORT || 3000
 
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

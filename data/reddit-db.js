@@ -1,6 +1,6 @@
 /* Mongoose Connection */
 const mongoose = require("mongoose");
-assert = require("assert");
+const assert = require("assert");
 
 const url = "mongodb://localhost/reddit-db";
 mongoose.Promise = global.Promise;
@@ -12,7 +12,7 @@ mongoose.connect(
     console.log("Connected successfully to database");
 
     // turn on for testing
-    db.close(); 
+    // db.close();
   }
 );
 mongoose.connection.on("error", console.error.bind(console, "MongoDB connection Error:"));
