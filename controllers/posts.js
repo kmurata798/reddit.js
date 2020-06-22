@@ -3,6 +3,18 @@ const Post = require('../models/post');
 
 module.exports = (app) => {
 
+  app.get("/posts/:id", function(req, res) {
+    // LOOK UP THE POST
+    Post.findById(req.params.id)
+      .then(post => {
+        console.log(post);
+        res.render("posts-show", { post: post.toObject() });
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  });
+
   app.get('/', (req, res) => {
     Post.find({}).lean()
       .then(posts => {
@@ -15,14 +27,10 @@ module.exports = (app) => {
     // GET request
   app.get('/posts/new', (req, res) => {
     res.render('posts-new');
-    })
+  })
 
   // CREATE
   app.post('/posts/new', (req, res) => {
-    // Post.create(req.body, function (err, post) {  
-    //   if (err) return handleError(err);  // saved!
-    //   console.log(post);
-    // });
     // INSTANTIATE INSTANCE OF POST MODEL
     const post = new Post(req.body);
     console.log(req.body);

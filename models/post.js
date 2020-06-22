@@ -9,6 +9,7 @@ var PostSchema = new Schema({
   summary: { type: String } // required : True
 });
 
+
 PostSchema.pre("save", function(next) {
   // SET createdAt AND updatedAt
   const now = new Date();
