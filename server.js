@@ -32,3 +32,6 @@ const port = process.env.PORT || 3000
 
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+
+// Allow other files to access 'app' ==> (exporting app variable)
+module.exports = app;
