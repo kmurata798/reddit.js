@@ -1,6 +1,8 @@
-// Initialize Express
+// Dotenv library used to encrypt passwords for security -> 'salting' a password
+require('dotenv').config();
 var cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+// Initialize Express
 const express = require('express')
 const app = express()
 
