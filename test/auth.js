@@ -13,8 +13,8 @@ describe("User", function() {
     // TESTS WILL GO HERE.
     it("should not be able to login if they have not registered", function(done) {
         agent.post("/login", { email: "wrong@wrong.com", password: "nope" }).end(function(err, res) {
-        res.status.should.be.equal(401);
-        done();
+            res.status.should.be.equal(401);
+            done();
         });
     });
     // signup
@@ -30,10 +30,9 @@ describe("User", function() {
             done();
             });
         });
+        // close down the agent after the tests to ensure the program exits appropriately.
+        after(function () {
+            agent.close()
+        });
     });
-});
-
-// close down the agent after the tests to ensure the program exits appropriately.
-after(function () {
-    agent.close()
 });
