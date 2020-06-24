@@ -7,7 +7,8 @@ var PostSchema = new Schema({
   title: { type: String, required: true },
   url: { type: String }, // required : True
   summary: { type: String }, // required : True
-  subreddit: { type: String }
+  subreddit: { type: String },
+  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }]
 });
 
 
