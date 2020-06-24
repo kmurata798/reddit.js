@@ -8,7 +8,8 @@ var PostSchema = new Schema({
   url: { type: String }, // required : True
   summary: { type: String }, // required : True
   subreddit: { type: String },
-  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }]
+  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+  author : { type: Schema.Types.ObjectId, ref: "User", required: true }
 });
 
 
