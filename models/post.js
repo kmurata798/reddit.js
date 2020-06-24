@@ -6,7 +6,8 @@ var PostSchema = new Schema({
   updatedAt: { type: Date },
   title: { type: String, required: true },
   url: { type: String }, // required : True
-  summary: { type: String } // required : True
+  summary: { type: String }, // required : True
+  subreddit: { type: String }
 });
 
 

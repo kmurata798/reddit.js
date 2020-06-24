@@ -2,23 +2,18 @@
 const express = require('express')
 const app = express()
 
-// Middleware
-// const methodOverride = require('method-override')
+// Assign dependencies to variables
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 var exphbs = require('express-handlebars');
-// const { Mongoose } = require('mongoose');
-
 
 // Database
 require('./data/reddit-db');
 
 // // The following line must appear AFTER const app = express() and before your routes!
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(expressValidator());
-
-
 // Use "main" as our default layout
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 // Use handlebars to render

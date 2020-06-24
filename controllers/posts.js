@@ -44,5 +44,17 @@ module.exports = (app) => {
         	.catch(err => {
           		console.log(err.message);
         	});
-    });
+	});
+	  // SUBREDDIT
+	app.get("/n/:subreddit", function(req, res) {
+		Post.find({ subreddit: req.params.subreddit })
+			.lean()
+		  	.then(posts => {
+				//   console.log(posts);
+				res.render("posts-index", { posts });
+		  	})
+		  	.catch(err => {
+				console.log(err);
+		  	});
+	});
 };
