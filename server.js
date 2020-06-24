@@ -10,6 +10,18 @@ const app = express()
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 var exphbs = require('express-handlebars');
+var checkAuth = (req, res, next) => {
+    console.log("Checking authentication");
+    if (typeof req.cookies.nToken === "undefined" || req.cookies.nToken === null) {
+      req.user = null;
+    } else {
+      var token = req.cookies.nToken;
+      var decodedToken = jwt.decode(token, { complete: true }) || {};
+      req.user = decodedToken.payload;
+    }
+  
+    next();
+};
 
 
 // Database
@@ -20,6 +32,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(expressValidator());
 app.use(cookieParser()); // Add this after you initialize express.
+app.use(checkAuth);
 // Use "main" as our default layout
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 // Use handlebars to render

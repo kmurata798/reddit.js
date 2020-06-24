@@ -5,29 +5,34 @@ module.exports = (app) => {
 
     // GET request
     app.get('/posts/new', (req, res) => {
-      	res.render('posts-new');
+		var currentUser = req.user;
+		if (req.user) {
+		  res.render('posts-new', { currentUser });
+		} else {
+			res.redirect('/');
+		}
     })
   
-    // CREATE
-    app.post('/posts/new', (req, res) => {
-      	// INSTANTIATE INSTANCE OF POST MODEL
-      	const post = new Post(req.body);
-      	console.log(req.body);
-		
-      	// SAVE INSTANCE OF POST MODEL TO DB
-      	post.save((err) => {
-      	  	console.log(err);
-      	  	if (err) { return console.log(err)}
-      	  		console.log(post);
-      	  		// REDIRECT TO THE ROOT
-      	  		return res.redirect(`/`);
-      	})
-    });
+	// CREATE
+	app.post("/posts/new", (req, res) => {
+		console.log(req.user);
+		if (req.user) {
+			var post = new Post(req.body);
+	
+			post.save(function(err, post) {
+				return res.redirect(`/`);
+			});
+		} else {
+			return res.status(401); // UNAUTHORIZED
+		}
+	});
     // Index ROUTE
     app.get('/', (req, res) => {
+		var currentUser = req.user;
+
       	Post.find({}).lean()
         	.then(posts => {
-        	  	res.render("posts-index", { posts });
+        	  	res.render("posts-index", { posts, currentUser});
         	})
         	.catch(err => {
         	  	console.log(err.message);
@@ -35,6 +40,7 @@ module.exports = (app) => {
     })
     // Show single post
     app.get("/posts/:id", function(req, res) {
+		var currentUser = req.user;
       	// LOOK UP THE POST
 		Post.findById(req.params.id).populate('comments').then((post) => {
 			res.render('posts-show', { post: post.toObject() })
@@ -44,6 +50,7 @@ module.exports = (app) => {
 	});
 	  // SUBREDDIT
 	app.get("/n/:subreddit", function(req, res) {
+		var currentUser = req.user;
 		Post.find({ subreddit: req.params.subreddit })
 			.lean()
 		  	.then(posts => {
