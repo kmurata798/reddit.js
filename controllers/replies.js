@@ -3,29 +3,30 @@ var Comment = require("../models/comment");
 // var User = require("../models/user");
 
 module.exports = app => {
-  // NEW REPLY
-  app.get("/posts/:postId/comments/:commentId/replies/new", (req, res) => {
-    var currentUser = req.user;
-    let post;
-    console.log("testing replies");
-    Post.findById(req.params.postId).lean()
-      .then(p => {
-        post = p;
-        return Comment.findById(req.params.commentId).lean();
-      })
-      .then(comment => {
-        res.render("replies-new", { post, comment, currentUser });
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
-  });
+    // NEW REPLY
+    app.get("/posts/:postId/comments/:commentId/replies/new", (req, res) => {
+        let post;
+        var currentUser = req.user;
+        console.log("testing replies");
+        Post.findById(req.params.postId).lean()
+        .then(p => {
+            post = p;
+            return Comment.findById(req.params.commentId).lean();
+        })
+        .then(comment => {
+            res.render("replies-new", { post, comment, currentUser });
+        })
+        .catch(err => {
+            console.log(err.message);
+        });
+    });
 
-  // CREATE REPLY
+    // CREATE REPLY
     app.post("/posts/:postId/comments/:commentId/replies", (req, res) => {
         // TURN REPLY INTO A COMMENT OBJECT
         const reply = new Comment(req.body);
         reply.author = req.user._id
+        console.log('inside create reply')
         // LOOKUP THE PARENT POST
         Post.findById(req.params.postId)
             .then(post => {
