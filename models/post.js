@@ -1,28 +1,34 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+const Populate = require("../utils/autopopulate");
 
-var PostSchema = new Schema({
-  createdAt: { type: Date },
-  updatedAt: { type: Date },
-  title: { type: String, required: true },
-  url: { type: String }, // required : True
-  summary: { type: String }, // required : True
-  subreddit: { type: String },
-  comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
-  author : { type: Schema.Types.ObjectId, ref: "User", required: true }
-});
+const postSchema = new Schema({
+    createdAt: { type: Date },
+    updatedAt: { type: Date },
+    title: {type: String, require: true},
+    url: {type: String, require: true},
+    summary: {type: String, require: true},
+    subreddit: {type: String, required: true},
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }], 
+    upVotes : [{ type: Schema.Types.ObjectId, ref: "User"}],
+    downVotes : [{ type: Schema.Types.ObjectId, ref: "User"}],
+    voteScore : {type: Number}
+})
 
+postSchema.pre('save', function(next){
+    // SET createdAt and updatedAt
+    const now = new Date()
+    this.updatedAt = now 
 
-PostSchema.pre("save", function(next) {
-  // SET createdAt AND updatedAt
-  const now = new Date();
-  this.updatedAt = now;
+    if (!this.createdAt) {
+        this.createdAt = now 
+    }
+    
+    next()
+})
 
-  if (!this.createdAt) {
-    this.createdAt = now;
-  }
+postSchema
+    .pre('findOne', Populate('author'))
+    .pre('find', Populate('author'))
 
-  next();
-});
-
-module.exports = mongoose.model("Post", PostSchema);
+module.exports = mongoose.model("Post", postSchema)
